@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
 
-
 # ==========================
 # UI HỌC SINH
 # ==========================
@@ -25,7 +24,6 @@ class StudentUI:
         self.window.destroy()
         self.logout_callback()
 
-
 # ==========================
 # UI GIÁO VIÊN
 # ==========================
@@ -48,7 +46,6 @@ class TeacherUI:
     def logout(self):
         self.window.destroy()
         self.logout_callback()
-
 
 # ==========================
 # UI ĐĂNG NHẬP
@@ -96,7 +93,6 @@ class LoginUI:
 
     def show_login(self):
         self.master.deiconify()
-
 
 # ==========================
 # CHẠY CHƯƠNG TRÌNH

@@ -1,5 +1,5 @@
 import tkinter as tk
-import register
+from . import register
 
 def open_user_screen(username, parent, db_path):
     win = tk.Toplevel(parent)

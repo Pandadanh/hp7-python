@@ -1,6 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3
+import re
+
+def is_valid_gmail(email):
+    pattern = r'^[a-zA-Z0-9._%+-]+@gmail\.com$'
+    return re.match(pattern, email)
 
 def open_register(parent, db_path, on_success_login):
     reg = tk.Toplevel(parent)
@@ -29,14 +34,32 @@ def open_register(parent, db_path, on_success_login):
         parent.deiconify()
 
     def register():
-        user = entry_user.get()
+        user = entry_user.get().strip()
         pw = entry_pass.get()
         cf = entry_confirm.get()
 
-        if not user or not pw:
+        # Không được để trống
+        if not user or not pw or not cf:
             messagebox.showwarning("Thiếu", "Không được để trống")
             return
 
+        # Kiểm tra gmail
+        if not is_valid_gmail(user):
+            messagebox.showerror(
+                "Sai định dạng",
+                "Username phải là Gmail (ví dụ: abc@gmail.com)"
+            )
+            return
+
+        # Kiểm tra độ dài mật khẩu
+        if len(pw) < 6:
+            messagebox.showerror(
+                "Mật khẩu yếu",
+                "Mật khẩu phải có ít nhất 6 ký tự"
+            )
+            return
+
+        # Kiểm tra khớp mật khẩu
         if pw != cf:
             messagebox.showerror("Lỗi", "Mật khẩu không khớp")
             return

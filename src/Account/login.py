@@ -2,8 +2,8 @@ import tkinter as tk
 from tkinter import messagebox
 import sqlite3
 import os
-import register
-import user_screen
+from . import register
+from .  import user_screen
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.abspath(os.path.join(BASE_DIR, "../../Database/users.db"))
@@ -83,3 +83,8 @@ tk.Button(frame, text="Register", font=("Arial", 12),
           width=15, command=open_register).pack()
 
 root.mainloop()
+def main():
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()

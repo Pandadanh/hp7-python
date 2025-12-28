@@ -33,6 +33,7 @@ def open_register(parent, db_path, on_success_login):
         reg.destroy()
         parent.deiconify()
 
+
     def register():
         user = entry_user.get().strip()
         pw = entry_pass.get()

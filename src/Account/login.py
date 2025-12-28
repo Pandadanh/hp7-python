@@ -3,7 +3,9 @@ from tkinter import messagebox
 import sqlite3
 import os
 from . import register
-from .  import user_screen
+from . import user_screen
+from src.Account.user_screen import open_user_screen
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_NAME = os.path.abspath(os.path.join(BASE_DIR, "../../Database/users.db"))
@@ -24,16 +26,23 @@ def init_db():
     conn.commit()
     conn.close()
 
+def on_login_success(username):
+    root.withdraw()          # Ẩn màn hình login
+    open_user_screen(username, on_logout)
+
+def on_logout():
+    root.deiconify()         
+
 # ---------- LOGIN ----------
 def login():
-    user = entry_user.get()
-    pw = entry_pass.get()
+    username = entry_user.get()
+    password = entry_pass.get()
 
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     cursor.execute(
         "SELECT locked FROM users WHERE username=? AND password=?",
-        (user, pw)
+        (username, password)
     )
     result = cursor.fetchone()
     conn.close()
@@ -46,15 +55,16 @@ def login():
         messagebox.showerror("Bị khóa", "Tài khoản đã bị khóa")
         return
 
-    login_success(user)
+    messagebox.showinfo("OK", "Đăng nhập thành công")
+    on_login_success(username)
 
-def login_success(username):
+def on_login_success(username):
     root.withdraw()
-    user_screen.open_user_screen(username, root, DB_NAME)
+    open_user_screen(username, on_logout)
 
-def open_register():
-    root.withdraw()
-    register.open_register(root, DB_NAME, login_success)
+def on_logout():
+    root.deiconify()
+
 
 # ---------- UI ----------
 init_db()
@@ -79,8 +89,17 @@ entry_pass.pack(ipady=8, pady=10)
 tk.Button(frame, text="Login", font=("Arial", 14, "bold"),
           width=20, height=2, command=login).pack(pady=20)
 
-tk.Button(frame, text="Register", font=("Arial", 12),
-          width=15, command=open_register).pack()
+tk.Button(
+    frame,
+    text="Register",
+    font=("Arial", 12),
+    width=15,
+    command=lambda: (
+        root.withdraw(),
+        register.open_register(root, DB_NAME, on_login_success)
+    )
+).pack(pady=10)
+
 
 root.mainloop()
 def main():
